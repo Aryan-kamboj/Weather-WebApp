@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="wrapper">
+        <h1>Weather App</h1>
+        <div class="your_search">
+            <button id ="your" class="active search_buttons" onclick="get_weather_data_coordinates()">Your Weather</button>
+            <button id="search" class="search_buttons" onclick="activate_search()">Search Weather</button>
+        </div>
+        <div id="search_weather_div" class="search_div">
+            <input type="text" placeholder="Search for city...." name="" id="search_bar">
+            <button onclick="get_weather_data_location()" id="search_btn"><i class="fa fa-search" aria-hidden="true"></i></button>
+        </div>
+        <div class="output_wrapper">
+            <div id="current_location">
+                <span id="location">Fetching</span>
+                <!-- how to add icon for each country  -->
+            </div>
+            <p id="skies_text">Clear</p>
+            <img id="skies_icon"></img>
+            <h1 id="temp">Fetching</h1>
+            <div class="widgets">
+                <div class="widget_box" id="wind_speed">
+                    <i style="color:rgb(120, 120, 120)" class="fa-solid fa-wind"></i>
+                    <p>WINDSPEED</p>
+                    <p id="speed">kph</p>
+                </div>
+                <div class="widget_box" id="humidity">
+                    <i style="color:rgb(124, 250, 153)" class="fa-brands fa-drupal"></i>
+                    <p>HUMIDITY</p>
+                    <p id="humid">%</p>
+                </div>
+                <div class="widget_box" id="clouds">
+                    <i style="color:rgb(124, 206, 250)" class="fa-solid fa-cloud"></i>
+                    <p>CLOUDS</p>
+                    <p id="cloud_cover">%</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://kit.fontawesome.com/3659200997.js" crossorigin="anonymous"></script>
+    <script src="index.js"></script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+*{
+    margin:0;
+    padding:0;
+}
+*:focus{
+    outline: none;
+}
+.wrapper{
+    height: 100vh;
+    min-width: 700px;
+    min-height:700px ;
+    width: 100vw;
+    background-image: linear-gradient(135deg,rgb(1, 62, 133),rgb(3, 135, 224));
+    color:white;
+    text-align: center;
+}
+h1{
+    padding-top: 2rem;
+}
+.your_search{
+    padding-top: 3rem;
+    display: flex;
+    justify-content: space-around;
+    margin: auto;
+    width:60vw;
+}
+.search_buttons{
+    font-size: large;
+    color: white;
+    border:solid transparent;
+    border-radius: 10px;
+    background-color: transparent;
+    padding: 0.5rem 2rem;
+}
+.active{
+    font-size: large;
+    color: white;
+    border-radius: 10px;
+    padding: 0.5rem 2rem;
+    background-color: rgba(255, 255, 255, 0.391);
+    border:solid rgba(255, 255, 255, 0.706);
+}
+.search_div{
+    padding-top:1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    scale: 0;
+}
+.search_div_active{
+    padding-top:1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    scale:1;
+}
+#search_bar{
+    color:white;
+    border-radius: 10px;
+    border:solid rgba(255, 255, 255, 0.706);
+    background-color: rgba(255, 255, 255, 0.391);
+    padding: 0.5rem 1rem;
+    width:30%;
+}
+#search_btn{
+    background-color: rgba(255, 255, 255, 0.391);
+    border:solid rgba(255, 255, 255, 0.706);
+    color:white;
+    height: 2rem;
+    width: 2rem;
+    margin-left:1rem ;
+    border-radius: 50%;
+}
+#current_location{
+    margin-top: 2rem;
+    font-size: 28px;
+}
+#skies_text{
+    margin-top: 1rem;
+}
+#skies_icon{
+    margin-top:1rem;
+}
+.widgets{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin: auto;
+    grid-column-gap: 20px;
+    max-width: 530px;
+    margin-top:1rem
+}
+.widget_box i{
+    font-size: 28px;
+}
+.widget_box{
+    padding-top:1.5rem;
+    background-color: rgba(255, 255, 255, 0.391);
+    height: 8rem;
+    width: 10rem;
+    line-height: 2rem;
+}
