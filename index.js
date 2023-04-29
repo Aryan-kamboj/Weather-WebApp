@@ -22,7 +22,7 @@ async function cords(){
 }
 async function weather_api_call_coordinates(long,lat){
     // console.log("weather api called");
-    const weather_data = await fetch("https://api.weatherapi.com/v1/current.json?key=<API_KEY>&q="+lat+","+long);
+    const weather_data = await fetch("http://api.weatherapi.com/v1/current.json?key=<API_KEY>&q="+lat+","+long);
     const weather_data_json = await weather_data.json();
     // console.log(weather_data_json);
     return weather_data_json;
@@ -63,7 +63,7 @@ get_weather_data_coordinates();
 
 async function get_weather_data_location(){
     var search_bar = document.getElementById("search_bar");
-        var weather_data = await fetch("https://api.weatherapi.com/v1/current.json?key=<API_KEY>&q="+search_bar.value);
+        var weather_data = await fetch("http://api.weatherapi.com/v1/current.json?key=<API_KEY>&q="+search_bar.value);
         weather_data=await weather_data.json();
     if(weather_data.error)
     {
