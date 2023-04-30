@@ -148,4 +148,8 @@ async function get_weather_data_location(){
 //         "country": "IN",
 //         "state": "Uttar Pradesh"
 //     }
+<<<<<<< HEAD
 // ]
+=======
+// }
+>>>>>>> af4eda860c02a76a678da6ea8e15fff35901f3a5
