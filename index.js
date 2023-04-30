@@ -1,6 +1,7 @@
 var x = document.getElementById("location");
 var coordinates;
-
+var key = "97c4d30a565cd70b78335fdff34c32c1";
+var weather_data;
 function activate_search(){
     var your_weather = document.getElementById("your");
     your_weather.classList.remove("active");
@@ -10,33 +11,21 @@ function activate_search(){
     search_weather_div.classList.add("search_div_active")
 }
 
-async function cords(){
-        navigator.geolocation.getCurrentPosition(showPosition);
-        // console.log("flag");
-        async function showPosition(position){
-        coordinates=position;
-        // console.log("location returned");
-        // console.log(coordinates);
-        weather_data = await weather_api_call_coordinates(coordinates.coords.longitude , coordinates.coords.latitude);
-    }
-}
 async function weather_api_call_coordinates(long,lat){
-    // console.log("weather api called");
-    const weather_data = await fetch("http://api.weatherapi.com/v1/current.json?key=<API_KEY>&q="+lat+","+long);
-    const weather_data_json = await weather_data.json();
-    // console.log(weather_data_json);
-    return weather_data_json;
-    } 
+    weather_data = fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&exclude={minutely,hourly,daily,alerts}&APPID=97c4d30a565cd70b78335fdff34c32c1`);
+    weather_data.then((response)=>{weather_data=response.json()
+        .then((weather_data)=>{setWeather(weather_data);});
+    });
+} 
 
-let weather_data;
-let current_location = document.getElementById("location");
-let skies_text = document.getElementById("skies_text");
-let skies_icon = document.getElementById("skies_icon");
-let temp = document.getElementById("temp");
-let speed = document.getElementById("speed");
-let humidity = document.getElementById("humid");
-let clouds = document.getElementById("cloud_cover");
-async function get_weather_data_coordinates(){
+async function get_current_loc(){
+        navigator.geolocation.getCurrentPosition(showPosition);
+        async function showPosition(position){
+            coordinates=position;
+            weather_api_call_coordinates(coordinates.coords.longitude , coordinates.coords.latitude);
+        }
+}
+async function get_current_weather(){
    //activating the required css 
     var your_weather = document.getElementById("your");
     your_weather.classList.add("active");
@@ -45,26 +34,34 @@ async function get_weather_data_coordinates(){
     var search_weather_div = document.getElementById("search_weather_div");
     search_weather_div.classList.remove("search_div_active")
     //
-
-    await cords();//getting the coordinates and weather data
-    // console.log(weather_data);
-    setTimeout(function renderItems(){
-        current_location.innerHTML = weather_data.location.name;
-        skies_text.innerHTML = weather_data.current.condition.text;
-        skies_icon.src = "https:"+weather_data.current.condition.icon;
-        temp.innerHTML = weather_data.current.temp_c+ "&#176;C";
-        speed.innerHTML = weather_data.current.wind_kph+" KpH"
-        humid.innerHTML = weather_data.current.humidity+" %"
-        clouds.innerHTML = weather_data.current.cloud+" %"
-    },3000)
-    
+    get_current_loc();
 }
-get_weather_data_coordinates();
+get_current_weather();
+let current_location = document.getElementById("location");
+let skies_text = document.getElementById("skies_text");
+let skies_icon = document.getElementById("skies_icon");
+let temp = document.getElementById("temp");
+let speed = document.getElementById("speed");
+let humidity = document.getElementById("humid");
+let clouds = document.getElementById("cloud_cover");
+
+function setWeather(weather_data){
+    current_location.innerHTML = weather_data.name;
+    skies_text.innerHTML = weather_data.weather[0].main;
+    skies_icon.src = `https://openweathermap.org/img/wn/${weather_data.weather[0].icon}@2x.png`;
+    temp.innerHTML = (weather_data.main.temp-273).toPrecision(3)+ "&#176;C";
+    speed.innerHTML = weather_data.wind.speed+" M/S"
+    humid.innerHTML = weather_data.main.humidity+" %"
+    clouds.innerHTML = weather_data.clouds.all+" %"
+}
+
 
 async function get_weather_data_location(){
     var search_bar = document.getElementById("search_bar");
-        var weather_data = await fetch("http://api.weatherapi.com/v1/current.json?key=<API_KEY>&q="+search_bar.value);
-        weather_data=await weather_data.json();
+        var location = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${search_bar.value}&limit=1&appid=${key}`);
+        location = await location.json();
+        location = location[0];//the response of this api is in the form of an array so we take the first element
+        weather_data = await weather_api_call_coordinates(location.lon,location.lat);
     if(weather_data.error)
     {
         current_location.innerHTML = weather_data.error.message;
@@ -75,58 +72,80 @@ async function get_weather_data_location(){
         humid.innerHTML = " %"
         clouds.innerHTML = " %"
     }
-    // console.log(weather_data);
     else{
-        current_location.innerHTML = weather_data.location.name;
-        skies_text.innerHTML = weather_data.current.condition.text;
-        skies_icon.src = "https:"+weather_data.current.condition.icon;
-        temp.innerHTML = weather_data.current.temp_c+ "&#176;C";
-        speed.innerHTML = weather_data.current.wind_kph+" KpH"
-        humid.innerHTML = weather_data.current.humidity+" %"
-        clouds.innerHTML = weather_data.current.cloud+" %"
+        setWeather(weather_data);
     }
 }
 
 //await keyword takes a function that returns a promise 
 
-// {
-//     "location": {
-//         "name": "Bagru",
-//         "region": "Rajasthan",
-//         "country": "India",
-//         "lat": 26.84,
-//         "lon": 75.56,
-//         "tz_id": "Asia/Kolkata",
-//         "localtime_epoch": 1680113801,
-//         "localtime": "2023-03-29 23:46"
+//{
+//     "coord": {
+//         "lon": 75.5612,
+//         "lat": 26.8421
 //     },
-//     "current": {
-//         "last_updated_epoch": 1680113700,
-//         "last_updated": "2023-03-29 23:45",
-//         "temp_c": 26,
-//         "temp_f": 78.8,
-//         "is_day": 0,
-//         "condition": {
-//             "text": "Mist",
-//             "icon": "//cdn.weatherapi.com/weather/64x64/night/143.png",
-//             "code": 1030
-//         },
-//         "wind_mph": 2.2,
-//         "wind_kph": 3.6,
-//         "wind_degree": 10,
-//         "wind_dir": "N",
-//         "pressure_mb": 1011,
-//         "pressure_in": 29.85,
-//         "precip_mm": 0,
-//         "precip_in": 0,
-//         "humidity": 37,
-//         "cloud": 50,
-//         "feelslike_c": 24.7,
-//         "feelslike_f": 76.4,
-//         "vis_km": 4,
-//         "vis_miles": 2,
-//         "uv": 1,
-//         "gust_mph": 13,
-//         "gust_kph": 20.9
-//     }
+//     "weather": [
+//         {
+//             "id": 804,
+//             "main": "Clouds",
+//             "description": "overcast clouds",
+//             "icon": "04d"
+//         }
+//     ],
+//     "base": "stations",
+//     "main": {
+//         "temp": 295.17,
+//         "feels_like": 294.18,
+//         "temp_min": 295.17,
+//         "temp_max": 295.17,
+//         "pressure": 1003,
+//         "humidity": 29,
+//         "sea_level": 1003,
+//         "grnd_level": 962
+//     },
+//     "visibility": 10000,
+//     "wind": {
+//         "speed": 0.92,
+//         "deg": 119,
+//         "gust": 3.61
+//     },
+//     "clouds": {
+//         "all": 92
+//     },
+//     "dt": 1682849339,
+//     "sys": {
+//         "type": 1,
+//         "id": 9170,
+//         "country": "IN",
+//         "sunrise": 1682814044,
+//         "sunset": 1682861349
+//     },
+//     "timezone": 19800,
+//     "id": 1273690,
+//     "name": "Dahmi Kalān",
+//     "cod": 200
 // }
+
+// [
+//     {
+//         "name": "Saharanpur",
+//         "local_names": {
+//             "ru": "Сахаранпур",
+//             "ur": "سهارنپر",
+//             "fr": "Saharanpur",
+//             "ja": "サハーランプル",
+//             "pa": "ਸਹਾਰਨਪੁਰ",
+//             "hi": "सहारनपुर",
+//             "de": "Saharanpur",
+//             "es": "Saharanpur",
+//             "kn": "ಸಹರನ್‌ಪುರ್",
+//             "en": "Saharanpur",
+//             "ar": "سهارنبر",
+//             "uk": "Сахаранпур"
+//         },
+//         "lat": 29.9637438,
+//         "lon": 77.5427464,
+//         "country": "IN",
+//         "state": "Uttar Pradesh"
+//     }
+// ]
